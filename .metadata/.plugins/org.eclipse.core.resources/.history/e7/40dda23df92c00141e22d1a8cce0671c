@@ -1,0 +1,6 @@
+package com.example.applicationscanner;
+
+public class TabDisplayActivity extends FragmentActivity implements
+ActionBar.TabListener{
+
+}

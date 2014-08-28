@@ -1,0 +1,71 @@
+package com.example.applicationscanner;
+
+import java.util.ArrayList;
+
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
+import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
+import android.util.Log;
+
+public class MainActivity extends TabActivity implements
+		ActionBar.TabListener {
+
+	private ViewPager viewPager;
+	private TabsPagerAdapter mAdapter;
+	private ActionBar actionBar;
+	private static Context mContext = null;
+	@Override
+	public void onTabReselected(Tab tab, FragmentTransaction ft) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onTabSelected(Tab tab, FragmentTransaction ft) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+		// TODO Auto-generated method stub
+		
+	}
+}
+
+	 intent = new Intent().setClass(this, Tab1.class);
+     spec = tabHost.newTabSpec("First").setIndicator("User Installed apps")
+                   .setContent(intent);
+      
+     //Add intent to tab
+     tabHost.addTab(spec);
+
+     /************* TAB2 ************/
+     intent = new Intent().setClass(this, Tab2.class);
+     spec = tabHost.newTabSpec("Second").setIndicator("System apps")
+                   .setContent(intent);  
+     tabHost.addTab(spec);
+
+     /************* TAB3 ************/
+     intent = new Intent().setClass(this, Tab3.class);
+     spec = tabHost.newTabSpec("Third").setIndicator("Updated System apps")
+                   .setContent(intent);
+     tabHost.addTab(spec);
+
+     // Set drawable images to tab
+     tabHost.getTabWidget().getChildAt(1).setBackgroundResource(R.id.tab2);
+     tabHost.getTabWidget().getChildAt(2).setBackgroundResource(R.drawable.tab3);
+        
+     // Set Tab1 as Default tab and change image   
+     tabHost.getTabWidget().setCurrentTab(o);
+     tabHost.getTabWidget().getChildAt(0).setBackgroundResource(R.drawable.tab1_over);
+      
+
+  }
+}

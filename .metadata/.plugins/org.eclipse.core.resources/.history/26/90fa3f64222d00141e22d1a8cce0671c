@@ -1,0 +1,8 @@
+package com.example.applicationscanner;
+
+import android.app.TabActivity;
+import android.widget.TabHost.OnTabChangeListener;
+
+public class HighRiskTabActivity extends TabActivity implements OnTabChangeListener{
+
+}

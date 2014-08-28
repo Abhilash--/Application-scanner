@@ -1,0 +1,79 @@
+package com.example.applicationscanner;
+
+import java.util.List;
+
+import android.R.string;
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
+import android.app.Activity;
+import android.app.FragmentTransaction;
+import android.content.pm.ApplicationInfo;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.widget.ArrayAdapter;
+
+public class MainActivity extends Activity implements
+ActionBar.TabListener {
+
+	string app_name;
+	ListView listView;
+	@Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        
+        String[] appname = getApplicationName();
+        
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.activity_list_item, appname);
+        listView.setAdapter(adapter);        
+     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.activity_main, menu);
+        return true;
+    }
+    
+	public String[] getApplicationName(){
+        List<ApplicationInfo> abc = getInstalledApplicationInfo();
+        int total_apps = abc.size();
+        String appname[] = new String[400];
+        ApplicationInfo[] appinfo = new ApplicationInfo[400];
+        Log.i("Abhi","total:"+total_apps);
+        for(int i = 0; i < total_apps-1;i++){
+        	Log.i("Abhi","count:"+i);
+        	appinfo[i] = abc.get(i);
+        	appname[i] = appinfo[i].name;
+        }
+        return appname;
+    }
+    public List<ApplicationInfo> getInstalledApplicationInfo(){
+    	List<ApplicationInfo> appinfo = getPackageManager().getInstalledApplications(128);
+		return appinfo;    	
+    }
+
+	@SuppressLint("NewApi")
+	@Override
+	public void onTabReselected(Tab tab, FragmentTransaction ft) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@SuppressLint("NewApi")
+	@Override
+	public void onTabSelected(Tab tab, FragmentTransaction ft) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@SuppressLint("NewApi")
+	@Override
+	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+		// TODO Auto-generated method stub
+		
+	}    
+}

@@ -1,0 +1,36 @@
+package com.example.applicationscanner;
+
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
+import android.app.FragmentTransaction;
+import android.content.Context;
+import android.support.v4.view.ViewPager;
+
+public class MainActivity extends Activity {
+
+	 intent = new Intent().setClass(this, Tab1.class);
+     spec = tabHost.newTabSpec("First").setIndicator("Applications that are chargable")
+                   .setContent(intent);
+      
+     //Add intent to tab
+     tabHost.addTab(spec);
+     /************* TAB2 ************/
+     intent = new Intent().setClass(this, Tab2.class);
+     spec = tabHost.newTabSpec("Second").setIndicator("Applications that use Data")
+                   .setContent(intent);  
+     tabHost.addTab(spec);
+
+     /************* TAB3 ************/
+     intent = new Intent().setClass(this, Tab3.class);
+     spec = tabHost.newTabSpec("Third").setIndicator("Applications that use Phone resource")
+                   .setContent(intent);
+     tabHost.addTab(spec);
+
+     // Set drawable images to tab
+     tabHost.getTabWidget().getChildAt(1).setBackgroundResource(R.id.tab2);
+     tabHost.getTabWidget().getChildAt(2).setBackgroundResource(R.drawable.tab3);
+        
+     // Set Tab1 as Default tab and change image   
+     tabHost.getTabWidget().setCurrentTab(o);
+     tabHost.getTabWidget().getChildAt(0).setBackgroundResource(R.drawable.tab1_over);
+  }

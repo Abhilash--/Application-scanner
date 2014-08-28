@@ -1,0 +1,28 @@
+package com.example.applicationscanner;
+
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+public class Tab1 extends Fragment {
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		
+
+		String [] chargApps = MainActivity.getChargableApplication();
+		
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(container.getContext(),
+				android.R.layout.simple_list_item_1, android.R.id.text1,
+				chargApps);
+		
+		ListView listView = (ListView) container.findViewById(R.id.listView1);
+		listView.setAdapter((ListAdapter)adapter);
+		return listView;
+	}
+}

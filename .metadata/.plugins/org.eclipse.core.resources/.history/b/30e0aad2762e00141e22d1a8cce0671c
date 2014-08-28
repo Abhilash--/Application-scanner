@@ -1,0 +1,168 @@
+package com.example.applicationscanner;
+
+import java.util.ArrayList;
+
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
+import android.app.FragmentTransaction;
+import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
+import android.util.Log;
+
+public class MainActivity extends FragmentActivity implements
+		ActionBar.TabListener {
+
+	private ViewPager viewPager;
+	private TabsPagerAdapter mAdapter;
+	private ActionBar actionBar;
+	private static Context mContext = null;
+
+	// Tab titles
+	private String[] tabs = { "Application that is chargable",
+			"Application access your data", "Less harmful applications" };
+
+	public static Context getAppContext() {
+		return mContext;
+	}
+
+	@SuppressLint("NewApi")
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+
+		getRiskyApplicationName();
+		
+		// Initilization
+		viewPager = (ViewPager) findViewById(R.id.pager);
+		actionBar = getActionBar();
+		mAdapter = new TabsPagerAdapter(getSupportFragmentManager());
+
+		viewPager.setAdapter(mAdapter);
+		actionBar.setHomeButtonEnabled(false);
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+		// Adding Tabs
+		for (String tab_name : tabs) {
+			actionBar.addTab(actionBar.newTab().setText(tab_name)
+					.setTabListener(this));
+		}
+
+		viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+			@Override
+			public void onPageSelected(int position) {
+				// on changing the page
+				// make respected tab selected
+				actionBar.setSelectedNavigationItem(position);
+			}
+
+			@Override
+			public void onPageScrolled(int arg0, float arg1, int arg2) {
+			}
+
+			@Override
+			public void onPageScrollStateChanged(int arg0) {
+			}
+		});
+	}
+
+	@SuppressLint("NewApi")
+	@Override
+	public void onTabReselected(Tab arg0, FragmentTransaction arg1) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@SuppressLint("NewApi")
+	@Override
+	public void onTabSelected(Tab arg0, FragmentTransaction arg1) {
+		// TODO Auto-generated method stub
+		viewPager.setCurrentItem(arg0.getPosition());
+	}
+
+	@SuppressLint("NewApi")
+	@Override
+	public void onTabUnselected(Tab arg0, FragmentTransaction arg1) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void getRiskyApplicationName() {
+		ArrayList<ApplicationInfo> abc = getInstalledApplicationInfo();
+		int total_apps = abc.size();
+		PackageInfo pckinfo = null;
+		String[] permission = new String[100];
+		String packagename;
+		ApplicationInfo[] appinfo = new ApplicationInfo[total_apps];
+		int cost = 0, data = 0, other = 0;
+
+		Log.i("Abhi", "total:" + total_apps);
+		for (int i = 0; i < total_apps; i++) {
+			Log.i("Abhi", "count:" + i);
+			appinfo[i] = abc.get(i);
+			packagename = appinfo[i].packageName;
+			try {
+				pckinfo = getPackageManager().getPackageInfo(packagename, 4096);
+			} catch (NameNotFoundException e) {
+
+			}
+			;
+			permission = pckinfo.requestedPermissions;
+			if (permission == null) {
+				Log.i("Abhi", "no permission");
+			} else {
+				for (String j : permission) {
+					Log.i("Abhi", "no permission:" + permission);
+					if (j.equals("android.permission.CALL_PHONE")
+							|| j.equals("android.permission.SEND_SMS")
+							|| j.equals("android.permission.CALL_PRIVILEGED")
+							|| j.equals("android.permission.INTERNET")) {
+						costappname[cost++] = getPackageManager()
+								.getApplicationLabel(appinfo[i]).toString();
+						break;
+					} else if (j.equals("android.permission.ACCOUNT_MANAGER")
+							|| j.equals("android.permission.MANAGE_ACCOUNTS")
+							|| j.equals("android.permission.READ_CONTACTS")) {
+						userdataappname[data++] = getPackageManager()
+								.getApplicationLabel(appinfo[i]).toString();
+						break;
+					} else {
+						otherappname[other++] = getPackageManager()
+								.getApplicationLabel(appinfo[i]).toString();
+						break;
+					}
+
+				}
+
+			}
+		}
+	}
+
+	public void appLiast(){
+		
+	}
+	public ArrayList<ApplicationInfo> getInstalledApplicationInfo() {
+		ArrayList<ApplicationInfo> appinfo = (ArrayList<ApplicationInfo>) getPackageManager()
+				.getInstalledApplications(0);
+		return appinfo;
+	}
+
+	public static String[] getChargableApplication() {
+		return costappname;
+	}
+
+	public String[] getDataAccessingApplication() {
+		return userdataappname;
+	}
+
+	public static String[] getOtherApplication() {
+		return otherappname;
+	}
+}

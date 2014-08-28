@@ -1,0 +1,24 @@
+package com.example.applicationscanner;
+
+import java.util.ArrayList;
+
+import android.app.Activity;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.util.Log;
+
+public class Populate_list{
+	
+	public static ArrayList<String> listForTab1(){
+		return costappname;
+	}
+	
+	public static ArrayList<String> listForTab2(){
+		return dataappnames;
+	}
+	
+	public static ArrayList<String> listForTab3(){
+		return otherappnames;
+	}
+}

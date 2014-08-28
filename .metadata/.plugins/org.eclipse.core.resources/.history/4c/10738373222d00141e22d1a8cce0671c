@@ -1,0 +1,17 @@
+package com.example.applicationscanner;
+
+import android.app.TabActivity;
+import android.widget.TabHost.OnTabChangeListener;
+
+@SuppressWarnings("deprecation")
+public class HighRiskTabActivity extends TabActivity implements OnTabChangeListener{
+
+	
+	
+	@Override
+	public void onTabChanged(String arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

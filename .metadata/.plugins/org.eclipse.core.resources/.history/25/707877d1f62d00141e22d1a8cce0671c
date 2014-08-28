@@ -1,0 +1,25 @@
+package com.example.applicationscanner;
+
+import java.util.ArrayList;
+
+import android.R.string;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Bundle;
+import android.util.Log;
+
+public class PopulatelistActivity extends MainActivity {
+	string app_name;
+
+
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+
+	}
+
+	
+}

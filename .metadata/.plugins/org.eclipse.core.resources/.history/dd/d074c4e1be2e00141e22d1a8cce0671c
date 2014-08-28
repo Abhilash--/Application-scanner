@@ -1,0 +1,171 @@
+package com.example.applicationscanner;
+
+import java.util.ArrayList;
+
+import android.app.TabActivity;
+import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Bundle;
+import android.util.Log;
+import android.widget.TabHost;
+
+@SuppressWarnings("deprecation")
+public class MainActivity extends TabActivity {
+
+	static ArrayList<String> costappname = new ArrayList<String>();
+	static ArrayList<String> dataappnames = new ArrayList<String>();
+	static ArrayList<String> otherappnames = new ArrayList<String>();
+	
+	/** Called when the activity is first created. */
+	TabHost tabHost;
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+		getApplicationName();
+		Populate_list().costappname = costappname;
+		Populate_list.dataappnames = dataappnames;
+		Populate_list.otherappnames = otherappnames;
+		
+		// Get TabHost Refference
+		tabHost = getTabHost();
+
+		// Set TabChangeListener called when tab changed
+		// tabHost.setOnTabChangedListener(this);
+
+		TabHost.TabSpec spec;
+		Intent intent;
+
+		/************* TAB1 ************/
+		// Create Intents to launch an Activity for the tab (to be reused)
+		intent = new Intent().setClass(this, Tab1.class);
+		spec = tabHost.newTabSpec("First")
+				.setIndicator("Applications that are chargable")
+				.setContent(intent);
+
+		// Add intent to tab
+		tabHost.addTab(spec);
+
+		/************* TAB2 ************/
+		intent = new Intent().setClass(this, Tab2.class);
+		spec = tabHost.newTabSpec("Second")
+				.setIndicator("Application that access your data")
+				.setContent(intent);
+		tabHost.addTab(spec);
+
+		/************* TAB3 ************/
+		intent = new Intent().setClass(this, Tab3.class);
+		spec = tabHost.newTabSpec("Third")
+				.setIndicator("Application that use ").setContent(intent);
+		tabHost.addTab(spec);
+
+		// Set drawable images to tab
+		/*
+		 * tabHost.getTabWidget().getChildAt(1).setBackgroundResource(R.id.tab2);
+		 * tabHost
+		 * .getTabWidget().getChildAt(2).setBackgroundResource(R.drawable.tab3);
+		 * 
+		 * // Set Tab1 as Default tab and change image
+		 * tabHost.getTabWidget().setCurrentTab(o);
+		 * tabHost.getTabWidget().getChildAt
+		 * (0).setBackgroundResource(R.drawable.tab1_over);
+		 * 
+		 * 
+		 * }
+		 * 
+		 * @Override public void onTabChanged(String tabId) {
+		 * 
+		 * /************ Called when tab changed ************
+		 */
+
+		// ********* Check current selected tab and change according images
+		// *******/
+
+		/*
+		 * for(int i=0;i<tabHost.getTabWidget().getChildCount();i++) { if(i==0)
+		 * tabHost
+		 * .getTabWidget().getChildAt(i).setBackgroundResource(R.drawable.tab1);
+		 * else if(i==1)
+		 * tabHost.getTabWidget().getChildAt(i).setBackgroundResource
+		 * (R.drawable.tab2); else if(i==2)
+		 * tabHost.getTabWidget().getChildAt(i).
+		 * setBackgroundResource(R.drawable.tab3); }
+		 * 
+		 * 
+		 * Log.i("tabs", "CurrentTab: "+tabHost.getCurrentTab());
+		 * 
+		 * if(tabHost.getCurrentTab()==0)
+		 * tabHost.getTabWidget().getChildAt(tabHost
+		 * .getCurrentTab()).setBackgroundResource(R.drawable.tab1_over); else
+		 * if(tabHost.getCurrentTab()==1)
+		 * tabHost.getTabWidget().getChildAt(tabHost
+		 * .getCurrentTab()).setBackgroundResource(R.drawable.tab2_over); else
+		 * if(tabHost.getCurrentTab()==2)
+		 * tabHost.getTabWidget().getChildAt(tabHost
+		 * .getCurrentTab()).setBackgroundResource(R.drawable.tab3_over);
+		 */}	
+	public void getApplicationName() {
+		ArrayList<ApplicationInfo> abc = getInstalledApplicationInfo();
+		int total_apps = abc.size();
+		PackageInfo pckinfo = new PackageInfo();
+		String[] permission = new String[100];
+		String packagename;
+		ApplicationInfo[] appinfo = new ApplicationInfo[total_apps];
+
+		Log.i("Abhi", "total:" + total_apps);
+
+		;
+		for (int i = 0; i < total_apps; i++) {
+			Log.i("Abhi", "count:" + i);
+			appinfo[i] = abc.get(i);
+			packagename = appinfo[i].packageName;
+			try {
+				pckinfo = getPackageManager().getPackageInfo(packagename, 4096);
+			} catch (NameNotFoundException e) {
+
+			}
+			;
+			permission = pckinfo.requestedPermissions;
+			if (permission == null) {
+				Log.i("Abhi", "no permission");
+			} else {
+				for (String j : permission) {
+					Log.i("Abhi", "no permission:" + permission);
+					if (j.equals("android.permission.CALL_PHONE")
+							|| j.equals("android.permission.SEND_SMS")
+							|| j.equals("android.permission.CALL_PRIVILEGED")
+							|| j.equals("android.permission.INTERNET")) {
+						costappname.add(getPackageManager()
+								.getApplicationLabel(appinfo[i]).toString());
+						break;
+					}
+					else if (j.equals("android.permission.ACCOUNT_MANAGER")
+							|| j.equals("android.permission.MANAGE_ACCOUNTS")
+							|| j.equals("android.permission.READ_CONTACTS")) {
+						dataappnames.add(getPackageManager()
+								.getApplicationLabel(appinfo[i]).toString());
+						break;
+					}
+					else{
+						otherappnames.add(getPackageManager()
+								.getApplicationLabel(appinfo[i]).toString());
+						break;
+					}
+				}
+			}
+		}
+		
+	}
+
+	public ArrayList<ApplicationInfo> getInstalledApplicationInfo() {
+		ArrayList<ApplicationInfo> appinfo = (ArrayList<ApplicationInfo>) getPackageManager()
+				.getInstalledApplications(0);
+		return appinfo;
+	}
+
+}

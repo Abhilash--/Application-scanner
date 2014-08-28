@@ -1,0 +1,91 @@
+package com.example.applicationscanner;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import android.R.string;
+import android.annotation.SuppressLint;
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
+import android.app.Activity;
+import android.app.FragmentTransaction;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.PermissionInfo;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+public class MainActivity extends Activity{
+
+	string app_name;
+	@SuppressLint("NewApi")
+	@Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        String[] appname = getRiskyApplicationName();
+        if(appname == null){
+	
+        }
+        else{
+		    ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+		    android.R.layout.simple_list_item_1, android.R.id.text1, appname);
+		    ListView listView = (ListView) findViewById(R.id.listView1);
+		    listView.setAdapter(adapter);
+        }
+
+  
+     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.activity_main, menu);
+        return true;
+    }
+    
+	public String[] getRiskyApplicationName(){
+        ArrayList<ApplicationInfo> abc = getInstalledApplicationInfo();
+        int total_apps = abc.size();
+        PackageInfo pckinfo = null;
+        String[] permission = new  String[100];
+        String packagename;
+        String appname[] = new String[total_apps];
+        ApplicationInfo[] appinfo = new ApplicationInfo[total_apps];
+        
+        Log.i("Abhi","total:"+total_apps);
+        for(int i = 0; i < total_apps;i++){
+        	Log.i("Abhi","count:"+i);
+        	appinfo[i] = abc.get(i);
+        	packagename = appinfo[i].packageName;    
+        	try {
+				pckinfo =  getPackageManager().getPackageInfo(packagename, 4096);
+			} catch (NameNotFoundException e) {
+				appname[i] = "Name not found";
+			};
+			permission = pckinfo.requestedPermissions;
+			if(permission == null){
+				
+			}
+			else{
+				for(String j : permission){
+		        	if(j.equals("android.permission.INTERNET")){
+		        		appname[i] = getPackageManager().getApplicationLabel(appinfo[i]).toString();
+				}
+			}
+
+        	}
+        }
+        return appname;
+    }
+    public ArrayList<ApplicationInfo> getInstalledApplicationInfo(){
+    	ArrayList<ApplicationInfo> appinfo = (ArrayList<ApplicationInfo>) getPackageManager().getInstalledApplications(0);
+		return appinfo;
+    }
+}

@@ -1,0 +1,22 @@
+package com.example.applicationscanner;
+
+import java.util.ArrayList;
+
+public class Populate_list{
+	
+	ArrayList<String> costappname = new ArrayList<String>();
+	ArrayList<String> dataappnames = new ArrayList<String>();
+	ArrayList<String> otherappnames = new ArrayList<String>();
+	
+	public ArrayList<String> listForTab1(){
+		return costappname;
+	}
+	
+	public ArrayList<String> listForTab2(){
+		return dataappnames;
+	}
+	
+	public ArrayList<String> listForTab3(){
+		return otherappnames;
+	}
+}

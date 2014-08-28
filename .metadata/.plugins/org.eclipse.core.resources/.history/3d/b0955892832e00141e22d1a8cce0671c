@@ -1,0 +1,31 @@
+package com.example.applicationscanner;
+
+import android.app.Activity;
+import android.os.Bundle;
+
+public class ShowApplicationDetails extends Activity{
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		final Button alarm = (Button) findViewById(R.id.button1);
+
+		final MediaPlayer mediaPlayer = MediaPlayer.create(MainActivity.this,
+				R.raw.abc);
+
+		alarm.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (clicked == 0) {
+					alarm.setText(R.string.stop);
+					clicked++;
+					mediaPlayer.setVolume(1.0f, 1.0f);
+					mediaPlayer.start();
+				} else {
+					mediaPlayer.pause();
+					alarm.setText(R.string.start);
+					clicked--;
+				}
+			}
+		});
+}

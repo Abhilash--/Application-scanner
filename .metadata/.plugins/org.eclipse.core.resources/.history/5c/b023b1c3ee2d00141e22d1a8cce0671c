@@ -1,0 +1,77 @@
+package com.example.applicationscanner;
+
+import java.util.ArrayList;
+
+import android.app.Activity;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Bundle;
+import android.util.Log;
+
+public class PopulatelistActivity extends Activity{
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		
+		
+	}
+	public void getRiskyApplicationName() {
+		ArrayList<ApplicationInfo> abc = getInstalledApplicationInfo();
+		int total_apps = abc.size();
+		PackageInfo pckinfo = null;
+		String[] permission = new String[100];
+		String packagename;
+		ApplicationInfo[] appinfo = new ApplicationInfo[total_apps];
+		int cost = 0, data = 0, other = 0;
+
+		Log.i("Abhi", "total:" + total_apps);
+		for (int i = 0; i < total_apps; i++) {
+			Log.i("Abhi", "count:" + i);
+			appinfo[i] = abc.get(i);
+			packagename = appinfo[i].packageName;
+			try {
+				pckinfo = getPackageManager().getPackageInfo(packagename, 4096);
+			} catch (NameNotFoundException e) {
+
+			}
+			;
+			permission = pckinfo.requestedPermissions;
+			if (permission == null) {
+				Log.i("Abhi", "no permission");
+			} else {
+				for (String j : permission) {
+					Log.i("Abhi", "no permission:" + permission);
+					if (j.equals("android.permission.CALL_PHONE")
+							|| j.equals("android.permission.SEND_SMS")
+							|| j.equals("android.permission.CALL_PRIVILEGED")) {
+						costappname[cost++] = getPackageManager()
+								.getApplicationLabel(appinfo[i]).toString();
+						break;
+					} else if (j.equals("android.permission.ACCOUNT_MANAGER")
+							|| j.equals("android.permission.MANAGE_ACCOUNTS")
+							|| j.equals("android.permission.READ_CONTACTS")) {
+						userdataappname[data++] = getPackageManager()
+								.getApplicationLabel(appinfo[i]).toString();
+						break;
+					} else {
+						otherappname[other++] = getPackageManager()
+								.getApplicationLabel(appinfo[i]).toString();
+						break;
+					}
+
+				}
+
+			}
+		}
+	}
+
+	public ArrayList<ApplicationInfo> getInstalledApplicationInfo() {
+		ArrayList<ApplicationInfo> appinfo = (ArrayList<ApplicationInfo>) getPackageManager()
+				.getInstalledApplications(0);
+		return appinfo;
+	}
+
+}

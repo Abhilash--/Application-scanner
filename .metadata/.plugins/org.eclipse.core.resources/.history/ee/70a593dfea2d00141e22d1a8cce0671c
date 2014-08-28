@@ -1,0 +1,85 @@
+package com.example.applicationscanner;
+
+import java.util.ArrayList;
+
+import android.R.string;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+public class MainActivity extends Activity {
+
+	string app_name;
+	
+	String costappname[] = new String[0];
+	String userdataappname[] = new String[0];
+	String otherappname[] = new String[0];
+
+	@SuppressLint("NewApi")
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+
+		String[] appname = getRiskyApplicationName();
+		if (appname == null) {
+			Log.i("Abhi", "appname null");
+		}
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_list_item_1, android.R.id.text1,
+				appname);
+		ListView listView = (ListView) findViewById(R.id.listView1);
+		listView.setAdapter(adapter);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.activity_main, menu);
+		return true;
+	}
+	public void getRiskyApplicationName(){
+        ArrayList<ApplicationInfo> abc = getInstalledApplicationInfo();
+        int total_apps = abc.size();
+        PackageInfo pckinfo = null;
+        String[] permission = new  String[100];
+        String packagename;
+        ApplicationInfo[] appinfo = new ApplicationInfo[total_apps];
+        int cost = 0, data = 0, other = 0;
+        
+        Log.i("Abhi","total:"+total_apps);
+        for(int i = 0; i < total_apps;i++){
+        	Log.i("Abhi","count:"+i);
+        	appinfo[i] = abc.get(i);
+        	packagename = appinfo[i].packageName;    
+        	try {
+				pckinfo =  getPackageManager().getPackageInfo(packagename, 4096);
+			} catch (NameNotFoundException e) {
+				appname[i] = "Name not found";
+			};
+			permission = pckinfo.requestedPermissions;
+			if(permission == null){
+				Log.i("Abhi","no permission");
+			}
+			else{
+				for(String j : permission){
+					Log.i("Abhi","no permission:"+permission);
+		        	if(j.equals("android.permission.CALL_PHONE") || j.equals("android.permission.BROADCAST_SMS")
+		        			|| j.equals("android.permission.CALL_PRIVILEGED")){
+		        		costappname[a++] = getPackageManager().getApplicationLabel(appinfo[i]).toString();
+		        		break;
+		        	}
+
+				}
+
+        	}
+        }
+    }
+}
